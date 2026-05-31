@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Сайт Гены | Современный дизайн</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, -apple-system, 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0b2b3b 0%, #1c5a7a 50%, #0f3b4f 100%);
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Эффект шума и текстуры поверх градиента (для глубины) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Декоративные плавающие круги */
+        .bg-blur {
+            position: fixed;
+            width: 60vmax;
+            height: 60vmax;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(80, 180, 220, 0.25) 0%, rgba(30, 100, 140, 0) 70%);
+            top: -20%;
+            right: -10%;
+            z-index: 0;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .bg-blur-2 {
+            position: fixed;
+            width: 70vmax;
+            height: 70vmax;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 120, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -30%;
+            left: -20%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Основной карточный блок */
+        .block {
+            position: relative;
+            z-index: 10;
+            background: rgba(15, 35, 45, 0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 68px;
+            padding: 50px 60px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s ease;
+            max-width: 90%;
+            width: 650px;
+            text-align: center;
+        }
+
+        .block:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Текст с элегантным оформлением */
+        .text {
+            font-size: clamp(2rem, 8vw, 3.8rem);
+            font-weight: 800;
+            color: #ffffff;
+            background: linear-gradient(135deg, #FFFFFF, #D6F0FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+        }
+
+        /* Декоративная линия под текстом */
+        .text::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 20%;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ffd966, #4fb4e8, transparent);
+            border-radius: 4px;
+        }
+
+        /* Стильная кнопка с градиентом и 3D-эффектом */
+        .btn-grad {
+            width: 100%;
+            max-width: 380px;
+            padding: 18px 32px;
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            background: linear-gradient(95deg, #1f5e7e 0%, #2f96c2 35%, #ffcd6b 100%);
+            background-size: 200% auto;
+            color: white;
+            transition: all 0.4s ease;
+            box-shadow: 0 12px 25px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+            font-family: inherit;
+            margin-top: 10px;
+        }
+
+        /* Эффект сияния при наведении */
+        .btn-grad::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .btn-grad:hover::before {
+            left: 100%;
+        }
+
+        .btn-grad:hover {
+            background-position: right center;
+            transform: scale(1.02);
+            box-shadow: 0 18px 30px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .btn-grad:active {
+            transform: scale(0.97);
+            transition: 0.05s;
+        }
+
+        /* Добавим маленький декоративный элемент — блестящую точку */
+        .glow-spot {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 220, 100, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 640px) {
+            .block {
+                padding: 32px 28px;
+                border-radius: 48px;
+                width: 95%;
+            }
+
+            .btn-grad {
+                padding: 14px 20px;
+                font-size: 1.2rem;
+                max-width: 280px;
+            }
+
+            .text::after {
+                width: 70%;
+                left: 15%;
+                bottom: -8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .block {
+                padding: 24px 20px;
+            }
+
+            .btn-grad {
+                padding: 12px 16px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Дополнительная микроанимация для появления */
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .block {
+            animation: fadeSlideUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        /* Улучшаем доступность для кнопки */
+        .btn-grad:focus-visible {
+            outline: 3px solid #ffcd6b;
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Декоративные фоновые элементы (размытые сферы) -->
+    <div class="bg-blur"></div>
+    <div class="bg-blur-2"></div>
+    <div class="glow-spot"></div>
+
+    <div class="block">
+        <div class="text">✨ Это сайт Гены ✨</div>
+        <button class="btn-grad" id="mainBtn">Перейти на сайт</button>
+    </div>
+
+    <script>
+        // Добавляем интерактивность: при клике на кнопку красивое уведомление и эффект
+        const button = document.getElementById('mainBtn');
+        
+        // Функция для создания всплывающего тоста (ненавязчивое сообщение)
+        function showToast(message, duration = 2500) {
+            // Если тост уже есть — удаляем старый
+            const existingToast = document.querySelector('.custom-toast');
+            if(existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.innerText = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            toast.style.backdropFilter = 'blur(16px)';
+            toast.style.color = '#FFE6A7';
+            toast.style.padding = '14px 28px';
+            toast.style.borderRadius = '60px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '1rem';
+            toast.style.fontFamily = "'Segoe UI', system-ui, sans-serif";
+            toast.style.zIndex = '1000';
+            toast.style.border = '1px solid rgba(255, 210, 100, 0.6)';
+            toast.style.boxShadow = '0 8px 20px rgba(0,0,0,0.3)';
+            toast.style.letterSpacing = '0.3px';
+            toast.style.backdropFilter = 'blur(8px)';
+            toast.style.whiteSpace = 'nowrap';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.25s ease, transform 0.2s ease';
+            toast.style.pointerEvents = 'none';
+            
+            document.body.appendChild(toast);
+            
+            // анимация появления
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(-50%) translateY(-10px)';
+            }, 10);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(0px)';
+                setTimeout(() => {
+                    if(toast && toast.remove) toast.remove();
+                }, 250);
+            }, duration);
+        }
+
+        // Эффект "вспышка" при клике
+        function addFlashEffect() {
+            const flashDiv = document.createElement('div');
+            flashDiv.style.position = 'fixed';
+            flashDiv.style.top = '0';
+            flashDiv.style.left = '0';
+            flashDiv.style.width = '100%';
+            flashDiv.style.height = '100%';
+            flashDiv.style.backgroundColor = 'rgba(255, 235, 140, 0.3)';
+            flashDiv.style.zIndex = '999';
+            flashDiv.style.pointerEvents = 'none';
+            flashDiv.style.transition = 'opacity 0.3s ease';
+            document.body.appendChild(flashDiv);
+            setTimeout(() => {
+                flashDiv.style.opacity = '0';
+                setTimeout(() => flashDiv.remove(), 350);
+            }, 50);
+        }
+
+        // Обработка нажатия на кнопку с переходом на сайт (имитация или реальный переход)
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            addFlashEffect();
+            
+            // Показываем красивое сообщение перед редиректом (или просто имитируем, но можно заменить на реальный url)
+            // Для демонстрации: вы можете указать настоящую ссылку.
+            // Сейчас сделаем эффект "приятный тост" и через 0.6 сек перейдем на указанный URL.
+            // Если нужно просто перейти без лишних задержек — можно сразу window.location.href, но с тостом красивее.
+            
+            showToast('🚀 Перенаправление на сайт Гены...', 1800);
+            
+            // Задержка для плавности, чтобы пользователь увидел уведомление
+            setTimeout(() => {
+                // ЗДЕСЬ УКАЖИТЕ РЕАЛЬНУЮ ССЫЛКУ, КУДА ДОЛЖЕН ВЕСТИ ПЕРЕХОД
+                // Пример: 'https://example.com' или 'https://gena-site.ru'
+                // Пока что оставлю ссылку-заглушку, но вы можете заменить на нужный URL.
+                const targetUrl = './pageMenu/index.html';  // Замените на настоящий сайт Гены!
+                // Раскомментируйте строку ниже для реального перехода:
+                window.location.href = targetUrl;
+                
+                // Если нужна дополнительная логика, можно добавить fallback.
+            }, 600);
+        });
+
+        // Добавим легкую рябь при загрузке (для адаптивности фона)
+        window.addEventListener('load', () => {
+            // небольшой эффект готовности
+            console.log('✨ Сайт Гены загружен в стиле!');
+        });
+        
+        // Альтернативно: если кнопка должна просто вести на внешний сайт без тоста на секунду,
+        // можно проще, но текущее решение выглядит изящно.
+        // Так как изначально требовалось "сделать красивый дизайн" для существующей разметки — 
+        // сохранил структуру, но значительно улучшил визуал и добавил живую реакцию.
+    </script>
+</body>
+</html>

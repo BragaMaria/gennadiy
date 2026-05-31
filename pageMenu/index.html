@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Морское меню | Побережье приключений</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Poppins', 'Montserrat', 'Roboto', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a2e4a 0%, #0a4c6e 40%, #2b7a62 100%);
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Анимированные волны на заднем плане */
+        .ocean-waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 180px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(64, 164, 188, 0.35)" fill-opacity="0.6" d="M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,176C672,171,768,181,864,197.3C960,213,1056,235,1152,234.7C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: cover;
+            animation: waveMove 12s linear infinite;
+            opacity: 0.7;
+        }
+
+        .img_cat{
+            width: 80px;
+            height: 80px;
+        }
+        .wave2 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 140px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(40, 120, 140, 0.5)" fill-opacity="0.7" d="M0,224L48,213.3C96,203,192,181,288,186.7C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,213.3C1248,235,1344,245,1392,250.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: cover;
+            animation: waveMove 18s linear infinite reverse;
+            opacity: 0.5;
+        }
+
+        @keyframes waveMove {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1440px; }
+        }
+
+        /* Песочная текстура внизу */
+        .sand-texture {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(180deg, rgba(210, 180, 140, 0) 0%, rgba(210, 180, 140, 0.4) 100%);
+            backdrop-filter: blur(2px);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Плавающие пузырьки/рыбки */
+        .bubble {
+            position: fixed;
+            background: radial-gradient(circle, rgba(255,255,240,0.5) 0%, rgba(150,210,255,0.2) 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBubble linear infinite;
+        }
+
+        @keyframes floatBubble {
+            0% {
+                transform: translateY(100vh) scale(0.3);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Главная карточка меню (в стиле корабельной палубы) */
+        .menu-container {
+            position: relative;
+            z-index: 20;
+            max-width: 750px;
+            width: 100%;
+            background: rgba(20, 50, 65, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 65px;
+            padding: 48px 32px 58px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(210, 235, 250, 0.4);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        /* Заголовок "Меню" в морском стиле */
+        .menu-title {
+            font-size: clamp(2.5rem, 8vw, 4.2rem);
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FFEBC4, #B3E4F5, #7BC6E0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .menu-title::after {
+            content: '⚓';
+            font-size: 2rem;
+            background: none;
+            -webkit-background-clip: unset;
+            color: #FFD966;
+            text-shadow: 0 0 4px #0a2e4a;
+            margin-left: 15px;
+            display: inline-block;
+        }
+
+        .menu-subtitle {
+            color: #D9F0FF;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            border-top: 1px solid rgba(255,245,200,0.4);
+            display: inline-block;
+            padding-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Сетка кнопок-карт */
+        .buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            margin: 20px 0 10px;
+        }
+
+        /* Каждая кнопка как морская карта */
+        .nav-btn {
+            width: 100%;
+            max-width: 460px;
+            padding: 18px 25px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            font-family: inherit;
+            border: none;
+            border-radius: 80px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(115deg, rgba(30, 72, 90, 0.85) 0%, rgba(20, 55, 70, 0.9) 100%);
+            backdrop-filter: blur(4px);
+            color: #FCF9EA;
+            border: 1px solid rgba(120, 190, 210, 0.7);
+            box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,210,0.3);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Иконки для кнопок */
+        .nav-btn .emoji-icon {
+            font-size: 1.9rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            transition: transform 0.2s ease;
+        }
+
+        /* Разные градиенты для кнопок (акценты морской тематики) */
+        .btn-gallery {
+            background: linear-gradient(115deg, #1a5f6e, #0e4a5c);
+            border-bottom: 3px solid #FFD966;
+        }
+
+        .btn-hogwarts {
+            background: linear-gradient(115deg, #2a6b5e, #135e4a);
+            border-bottom: 3px solid #C0A86A;
+        }
+
+        .btn-crooked {
+            background: linear-gradient(115deg, #1c5770, #0a4057);
+            border-bottom: 3px solid #E2B86B;
+        }
+
+        /* Эффект волны при наведении */
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 250, 210, 0.2), transparent);
+            transition: left 0.5s ease;
+            z-index: 0;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 215, 120, 0.9);
+            letter-spacing: 1px;
+        }
+
+        .nav-btn:active {
+            transform: translateY(2px);
+            transition: 0.05s;
+        }
+
+        /* Дополнительные морские элементы: ракушка, якорь */
+        .marine-decor {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            user-select: none;
+        }
+
+        .anchor-left {
+            bottom: 20px;
+            left: 15px;
+            font-size: 70px;
+            transform: rotate(-15deg);
+        }
+
+        .shell-right {
+            top: 30px;
+            right: 20px;
+            font-size: 65px;
+            transform: rotate(10deg);
+        }
+
+        .starfish {
+            bottom: 15%;
+            right: 5%;
+            font-size: 45px;
+            opacity: 0.25;
+        }
+
+        /* Адаптивность под мобильные */
+        @media (max-width: 640px) {
+            .menu-container {
+                padding: 32px 22px 40px;
+                border-radius: 50px;
+            }
+            
+            .nav-btn {
+                padding: 14px 20px;
+                font-size: 1.1rem;
+                max-width: 320px;
+            }
+            
+            .nav-btn .emoji-icon {
+                font-size: 1.6rem;
+            }
+            
+            .menu-title::after {
+                font-size: 1.6rem;
+                margin-left: 8px;
+            }
+            
+            .menu-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .marine-decor {
+                display: none;
+            }
+        }
+
+        /* Анимация появления */
+        @keyframes riseFromSea {
+            0% {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-container {
+            animation: riseFromSea 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        /* Стили для уведомления (toast) */
+        .sea-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(10, 45, 65, 0.95);
+            backdrop-filter: blur(12px);
+            color: #FCE9B4;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            z-index: 1000;
+            border-left: 4px solid #FFCF6E;
+            border-right: 4px solid #4aa3c2;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+
+        @media (max-width: 550px) {
+            .sea-toast {
+                white-space: normal;
+                text-align: center;
+                width: 85%;
+                font-size: 0.8rem;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Волны океана -->
+    <div class="ocean-waves">
+        <div class="wave"></div>
+        <div class="wave2"></div>
+    </div>
+    <div class="sand-texture"></div>
+
+    <!-- Декоративные пузырьки (создаются js) -->
+    <!-- Морской декор -->
+    <div class="marine-decor anchor-left">⚓</div>
+    <div class="marine-decor shell-right">🐚</div>
+    <div class="marine-decor starfish">⭐</div>
+
+    <div class="menu-container">
+        <div class="menu-title">Море Хогвартса</div>
+        <div class="menu-subtitle">🌊 Открой портал к приключениям 🌊</div>
+
+        <div class="buttons-grid">
+            <button class="nav-btn btn-gallery" id="btnGallery">
+                <span class="emoji-icon">🖼️🌊</span>
+                <span>Галерея побережья</span>
+                <span class="emoji-icon">🐚</span>
+            </button>
+            
+            <button class="nav-btn btn-hogwarts" id="btnHogwarts">
+                <span class="emoji-icon">🏰✨</span>
+                <span>Информация о Hogwarts</span>
+                <span class="emoji-icon">🪄</span>
+            </button>
+
+            <button class="nav-btn btn-hogwarts" id="btnMinigame">
+                <span class="emoji-icon">🏰✨</span>
+                <span>Мини игра</span>
+                <span class="emoji-icon">🪄</span>
+            </button>
+            
+            <button class="nav-btn btn-crooked1" id="btnCrooked1">
+                <span class="emoji-icon">🗺️🌙</span>
+                <span>Тайны Crooked Lane</span>
+                <span class="emoji-icon">🔮</span>
+            </button>
+            <button class="nav-btn btn-crooked" id="btnCrooked">
+                <span class="emoji-icon">🗺️🌙</span>
+                <span>Попробуй догони</span>
+                <img class="img_cat" src="../51c11d689357f99370a5a176f91a5718.jpg" alt="">
+                <span class="emoji-icon">🔮</span>
+            </button>
+        </div>
+        <div style="margin-top: 28px; font-size: 0.75rem; color: #9ecfdf; opacity: 0.7;">🐟 попутного ветра и морских открытий 🐟</div>
+    </div>
+
+    <script>
+        // Функция создания плавающих пузырей
+        function createBubbles() {
+            const bubbleCount = 25;
+            for (let i = 0; i < bubbleCount; i++) {
+                let bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.random() * 40 + 15;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = Math.random() * 8 + 5 + 's';
+                bubble.style.animationDelay = Math.random() * 15 + 's';
+                document.body.appendChild(bubble);
+            }
+        }
+        createBubbles();
+
+        // Небольшая рыбка? добавим еще один красивый эффект - плавающий кораблик в углу (доп. декор)
+        const shipEmoji = document.createElement('div');
+        shipEmoji.innerHTML = '⛵';
+        shipEmoji.style.position = 'fixed';
+        shipEmoji.style.bottom = '12px';
+        shipEmoji.style.right = '20px';
+        shipEmoji.style.fontSize = '38px';
+        shipEmoji.style.opacity = '0.3';
+        shipEmoji.style.zIndex = '15';
+        shipEmoji.style.filter = 'drop-shadow(0 2px 3px rgba(0,0,0,0.2))';
+        shipEmoji.style.pointerEvents = 'none';
+        shipEmoji.style.transform = 'rotate(5deg)';
+        document.body.appendChild(shipEmoji);
+
+        // Кастомный тост (уведомление в морском стиле)
+        function showSeaToast(message, duration = 2200) {
+            let existing = document.querySelector('.sea-toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'sea-toast';
+            toast.innerHTML = `🌊✨ ${message} ✨🌊`;
+            document.body.appendChild(toast);
+            
+            // анимация появления
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(-10px)';
+                toast.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if(toast && toast.remove) toast.remove();
+                }, 250);
+            }, duration);
+        }
+
+        // Эффект "всплеск" при клике
+        function splashEffect(btnElement) {
+            btnElement.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                btnElement.style.transform = '';
+            }, 120);
+            
+            // Быстрая рябь воды (имитация)
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.borderRadius = '50%';
+            ripple.style.width = '80px';
+            ripple.style.height = '80px';
+            ripple.style.backgroundColor = 'rgba(180, 230, 255, 0.4)';
+            ripple.style.left = (event.clientX - 40) + 'px';
+            ripple.style.top = (event.clientY - 40) + 'px';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.zIndex = '999';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.transition = 'transform 0.4s ease-out, opacity 0.5s';
+            document.body.appendChild(ripple);
+            setTimeout(() => {
+                ripple.style.transform = 'scale(5)';
+                ripple.style.opacity = '0';
+            }, 10);
+            setTimeout(() => {
+                ripple.remove();
+            }, 500);
+        }
+
+        // Функции перенаправления (сохраняем исходные пути из вашего кода, но с проверкой)
+        // Обратите внимание: пути '../pageGallery/index.html' и т.д. могут отличаться.
+        // Для безопасной навигации выводим красивый тост + переход.
+        const galleryBtn = document.getElementById('btnGallery');
+        const hogwartsBtn = document.getElementById('btnHogwarts');
+        const crookedBtn = document.getElementById('btnCrooked');
+        const btnMinigame = document.getElementById('btnMinigame');
+        
+        // Обработчик с эффектом и тостом
+        function handleNavigation(url, pageName, event) {
+            if (event) {
+                splashEffect(event.currentTarget);
+            }
+            showSeaToast(`Отправляемся в "${pageName}"... 🧭`, 1300);
+            
+            // небольшая задержка для плавности анимации
+            setTimeout(() => {
+                // Проверяем, существует ли URL; если надо, можно добавить fallback
+                // В оригинале были относительные пути. Сохраним их же.
+                window.location.href = url;
+            }, 450);
+        }
+        
+        // События с корректными URL (как в вашем коде)
+        if (galleryBtn) {
+            galleryBtn.addEventListener('click', (e) => {
+                handleNavigation('../pageGallery/index.html', 'Галерею', e);
+            });
+        }
+
+        if (btnMinigame) {
+            btnMinigame.addEventListener('click', (e) => {
+                handleNavigation('../pageGame/index.html', 'Игра', e);
+            });
+        }
+        
+        if (hogwartsBtn) {
+            hogwartsBtn.addEventListener('click', (e) => {
+                handleNavigation('../pageInfo1/index.html', 'Хогвартс', e);
+            });
+        }
+        
+        if (crookedBtn) {
+            crookedBtn.addEventListener('click', (e) => {
+                handleNavigation('../pageInfo2/index.html', 'Crooked Lane', e);
+            });
+        }
+        
+        // Доп. защита: если какой-то из кнопок нет в DOM (но они есть по id), дополнительно выводим в консоль подсказку
+        console.log('Морское меню загружено! 🐠');
+        
+        // Можно добавить эффект покачивания для заголовка при наведении (лёгкая анимация)
+        const titleElem = document.querySelector('.menu-title');
+        if(titleElem) {
+            titleElem.style.transition = 'text-shadow 0.2s';
+            titleElem.addEventListener('mouseenter', () => {
+                titleElem.style.textShadow = '0 0 12px #FFE5A3';
+            });
+            titleElem.addEventListener('mouseleave', () => {
+                titleElem.style.textShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+            });
+        }
+        
+        // Динамическая подстройка для touch устройств (убираем двойной клик)
+        const allButtons = document.querySelectorAll('.nav-btn');
+        allButtons.forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                // небольшая вибро-поддержка (не везде)
+                if (navigator.vibrate) navigator.vibrate(20);
+            });
+        });
+        
+        // Ждём полной загрузки страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('btnCrooked');
+    
+    if (!button) {
+        console.error('Кнопка с id "btnCrooked" не найдена');
+        return;
+    }
+    
+    // Настройки
+    const settings = {
+        buttonWidth: 0,
+        buttonHeight: 0,
+        padding: 10,
+        baseMoveDelay: 300,        // Уменьшил базовую задержку
+        minMoveDelay: 30,          // Минимальная задержка
+        animationDuration: 100,    // Уменьшил длительность анимации
+        mouseSpeed: 0,
+        lastMouseX: 0,
+        lastMouseY: 0,
+        lastMouseTime: 0,
+        moveInterval: null,
+        isMoving: false,           // Флаг, чтобы не было наложения анимаций
+        requestId: null
+    };
+    
+    // Функция для получения размеров кнопки
+    const updateButtonSize = () => {
+        const rect = button.getBoundingClientRect();
+        settings.buttonWidth = rect.width;
+        settings.buttonHeight = rect.height;
+    };
+    
+    // Функция для получения безопасных координат
+    const getRandomPosition = () => {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        const maxX = Math.max(settings.padding, viewportWidth - settings.buttonWidth - settings.padding);
+        const maxY = Math.max(settings.padding, viewportHeight - settings.buttonHeight - settings.padding);
+        const minX = settings.padding;
+        const minY = settings.padding;
+        
+        // Если кнопка больше экрана - ставим в центр
+        if (maxX <= minX) {
+            return { 
+                x: (viewportWidth - settings.buttonWidth) / 2, 
+                y: (viewportHeight - settings.buttonHeight) / 2 
+            };
+        }
+        
+        // Случайные координаты
+        const x = minX + Math.random() * (maxX - minX);
+        const y = minY + Math.random() * (maxY - minY);
+        
+        return { x, y };
+    };
+    
+    // Функция перемещения кнопки (без накопления вызовов)
+    const moveButton = () => {
+        // Предотвращаем множественные вызовы
+        if (settings.isMoving) return;
+        
+        settings.isMoving = true;
+        
+        updateButtonSize();
+        const { x, y } = getRandomPosition();
+        
+        // Используем requestAnimationFrame для плавности
+        if (settings.requestId) {
+            cancelAnimationFrame(settings.requestId);
+        }
+        
+        settings.requestId = requestAnimationFrame(() => {
+            button.style.transition = `left ${settings.animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), top ${settings.animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            button.style.position = 'fixed';
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+            button.style.zIndex = '9999';
+            button.style.margin = '0';
+            
+            // Сбрасываем флаг через время анимации
+            setTimeout(() => {
+                settings.isMoving = false;
+            }, settings.animationDuration + 10);
+        });
+    };
+    
+    // Мгновенное перемещение без очереди
+    const moveButtonImmediate = () => {
+        updateButtonSize();
+        const { x, y } = getRandomPosition();
+        
+        button.style.transition = `left ${settings.animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), top ${settings.animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        button.style.position = 'fixed';
+        button.style.left = `${x}px`;
+        button.style.top = `${y}px`;
+        button.style.zIndex = '9999';
+        button.style.margin = '0';
+    };
+    
+    // Перезапуск интервала с новой скоростью
+    const restartMoveInterval = () => {
+        if (settings.moveInterval) {
+            clearInterval(settings.moveInterval);
+            settings.moveInterval = null;
+        }
+        
+        // Расчёт задержки на основе скорости мыши
+        let delay = settings.baseMoveDelay - (settings.mouseSpeed * 8);
+        delay = Math.max(settings.minMoveDelay, Math.min(settings.baseMoveDelay, delay));
+        
+        // Динамическая длительность анимации
+        if (settings.mouseSpeed > 40) {
+            settings.animationDuration = 50;
+        } else if (settings.mouseSpeed > 20) {
+            settings.animationDuration = 70;
+        } else if (settings.mouseSpeed > 10) {
+            settings.animationDuration = 90;
+        } else {
+            settings.animationDuration = 120;
+        }
+        
+        // Запускаем новый интервал
+        settings.moveInterval = setInterval(() => {
+            moveButton();
+        }, delay);
+    };
+    
+    // Отслеживание скорости мыши (оптимизированное)
+    let mouseMoveTimer = null;
+    let lastCallTime = 0;
+    
+    const trackMouseSpeed = (e) => {
+        // Троттлинг для производительности
+        const now = Date.now();
+        if (now - lastCallTime < 16) return; // Ограничиваем до ~60fps
+        lastCallTime = now;
+        
+        const currentTime = Date.now();
+        const deltaTime = currentTime - settings.lastMouseTime;
+        
+        if (deltaTime > 0 && deltaTime < 200 && settings.lastMouseX !== 0) {
+            const deltaX = Math.abs(e.clientX - settings.lastMouseX);
+            const deltaY = Math.abs(e.clientY - settings.lastMouseY);
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            // Скорость в пикселях в секунду
+            let speed = (distance / deltaTime) * 100;
+            speed = Math.min(80, speed); // Ограничиваем максимум
+            
+            // Плавное изменение скорости
+            settings.mouseSpeed = Math.min(80, settings.mouseSpeed * 0.6 + speed * 0.4);
+            
+            // Перезапускаем интервал
+            if (settings.moveInterval) {
+                restartMoveInterval();
+            }
+        }
+        
+        settings.lastMouseX = e.clientX;
+        settings.lastMouseY = e.clientY;
+        settings.lastMouseTime = currentTime;
+    };
+    
+    // Плавное уменьшение скорости
+    let speedDecayInterval = null;
+    
+    const startSpeedDecay = () => {
+        if (speedDecayInterval) clearInterval(speedDecayInterval);
+        
+        speedDecayInterval = setInterval(() => {
+            if (settings.mouseSpeed > 0) {
+                settings.mouseSpeed = Math.max(0, settings.mouseSpeed - 3);
+                if (settings.mouseSpeed === 0 && settings.moveInterval) {
+                    restartMoveInterval();
+                } else if (settings.moveInterval) {
+                    restartMoveInterval();
+                }
+            }
+        }, 300);
+    };
+    
+    // Инициализация
+    button.style.position = 'fixed';
+    button.style.cursor = 'pointer';
+    button.style.margin = '0';
+    button.style.willChange = 'transform';
+    
+    // Альтернативный метод для супер плавного движения (использует transform)
+    // Раскомментируйте если нужна максимальная плавность
+    /*
+    button.style.transition = 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    const moveButtonTransform = () => {
+        updateButtonSize();
+        const { x, y } = getRandomPosition();
+        button.style.transform = `translate(${x}px, ${y}px)`;
+    };
+    */
+    
+    // Получаем размеры и ставим начальную позицию
+    setTimeout(() => {
+        updateButtonSize();
+        moveButtonImmediate();
+    }, 50);
+    
+    // Запускаем интервал
+    restartMoveInterval();
+    startSpeedDecay();
+    
+    // Слушаем движение мыши с пассивным режимом для производительности
+    document.addEventListener('mousemove', trackMouseSpeed, { passive: true });
+    
+    // Сбрасываем скорость когда мышь останавливается
+    let mouseStopTimer;
+    document.addEventListener('mousemove', () => {
+        clearTimeout(mouseStopTimer);
+        mouseStopTimer = setTimeout(() => {
+            // Мышь остановилась - скорость будет плавно падать
+        }, 300);
+    });
+    
+    // Обработчик нажатия на кнопку
+    button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        // Останавливаем все интервалы
+        if (settings.moveInterval) {
+            clearInterval(settings.moveInterval);
+            settings.moveInterval = null;
+        }
+        if (speedDecayInterval) {
+            clearInterval(speedDecayInterval);
+            speedDecayInterval = null;
+        }
+        
+        // Визуальный эффект
+        button.style.transform = 'scale(0.95)';
+        button.style.opacity = '0.8';
+        button.style.transition = 'all 0.1s ease';
+        button.style.boxShadow = '0 0 15px rgba(255, 255, 0, 0.8)';
+        
+        // Перенаправление
+        setTimeout(() => {
+            // ЗАМЕНИТЕ НА ВАШУ ССЫЛКУ
+            window.location.href = '../pageMems/index.html';
+        }, 100);
+    });
+    
+    // Корректировка при изменении размера окна
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateButtonSize();
+            moveButtonImmediate();
+        }, 100);
+    });
+    
+    // Очистка при выгрузке страницы
+    window.addEventListener('beforeunload', () => {
+        if (settings.moveInterval) clearInterval(settings.moveInterval);
+        if (speedDecayInterval) clearInterval(speedDecayInterval);
+        if (settings.requestId) cancelAnimationFrame(settings.requestId);
+    });
+    
+    console.log('Кнопка убегает плавно и без зависаний! 🏃‍♂️');
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Хогвартс · Текст и волшебные кадры | Логотип школы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b1a1e 0%, #1a2a2f 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', 'Georgia', serif;
+            line-height: 1.55;
+            color: #1e2f3e;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Главный контейнер: текст слева, картинки справа */
+        .layout {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(2px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .split-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* ЛЕВАЯ КОЛОНКА — текст с элегантным стилем */
+        .text-section {
+            flex: 1.2;
+            min-width: 280px;
+            background: rgba(255, 253, 245, 0.97);
+            padding: 2.2rem 2rem;
+            border-radius: 0 1.5rem 1.5rem 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Декоративный акцент для параграфов */
+        .text-section p {
+            margin-bottom: 1.5rem;
+            font-size: 1.02rem;
+            letter-spacing: 0.01em;
+            text-align: justify;
+        }
+
+        .text-section p:first-of-type {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1e3a4d;
+            border-left: 4px solid #d4af37;
+            padding-left: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .text-section p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .text-section p:first-of-type::first-letter {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #b8860b;
+            font-family: 'Georgia', serif;
+        }
+
+        /* ПРАВАЯ КОЛОНКА — галерея изображений + логотип в пустом пространстве под картинками */
+        .gallery-section {
+            flex: 1;
+            min-width: 280px;
+            background: #fefaf0;
+            padding: 2rem 1.8rem;
+            border-radius: 1.5rem 0 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        /* Красивая сетка картинок: автоматическая подстройка + грид */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.2rem;
+            align-items: start;
+        }
+
+        /* каждая картинка – карточка с тенью, скруглением и переходом */
+        .img-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            box-shadow: 0 12px 22px -12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .img-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 28px -14px rgba(0, 0, 0, 0.3);
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .img-card:hover img {
+            transform: scale(1.02);
+        }
+
+        /* волшебная звёздочка при ховере */
+        .img-card::after {
+            content: "✨";
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .img-card:hover::after {
+            opacity: 0.7;
+        }
+
+        /* Заголовок галереи */
+        .gallery-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            border-bottom: 2px dashed #decba4;
+            padding-bottom: 0.6rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .gallery-header h3 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.2px;
+            background: linear-gradient(135deg, #2c4e5e, #b87c2e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .gallery-header span {
+            font-size: 0.8rem;
+            color: #8b6946;
+            background: #f0e5d2;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+        }
+
+        /* ========= НОВЫЙ БЛОК: ЛОГОТИП ХОГВАРТСА ========= */
+        /* Пустое пространство под картинками — теперь здесь размещается герб */
+        .hogwarts-logo-area {
+            margin-top: 0.75rem;
+            padding-top: 1rem;
+            border-top: 2px dashed #e2d4bd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fffbf0;
+            border-radius: 1.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            width: 100%;
+            padding: 1rem 0.5rem;
+            background: linear-gradient(145deg, #faf5e6, #fff7ea);
+            border-radius: 1.5rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 8px 20px -8px rgba(0,0,0,0.1);
+        }
+
+        .logo-container img {
+            max-width: 140px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s ease, filter 0.3s;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.02);
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
+        }
+
+        .logo-container p {
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: #a0773b;
+            margin-top: 0.6rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            background: #f2e8d5;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Адаптивность: на узких экранах текст сверху, картинки снизу, логотип органично вливается */
+        @media (max-width: 860px) {
+            body {
+                padding: 1rem;
+            }
+            .split-container {
+                flex-direction: column;
+            }
+            .text-section {
+                border-radius: 1.5rem 1.5rem 0 0;
+                padding: 1.8rem;
+            }
+            .gallery-section {
+                border-radius: 0 0 1.5rem 1.5rem;
+                padding: 1.8rem;
+            }
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+            .img-card img {
+                height: 160px;
+            }
+            .logo-container img {
+                max-width: 110px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .image-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .img-card img {
+                height: 140px;
+            }
+            .text-section p {
+                font-size: 0.96rem;
+            }
+            .logo-container img {
+                max-width: 95px;
+            }
+        }
+
+        /* лёгкая рамка и декор */
+        .layout {
+            transition: all 0.2s;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .gallery-section {
+            max-height: 100%;
+        }
+
+        .img-card {
+            background: #fef3e2;
+        }
+
+        /* акцентные буквы в тексте */
+        .text-section p:nth-child(2)::first-letter,
+        .text-section p:nth-child(3)::first-letter {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #a67c2e;
+            font-family: 'Georgia', serif;
+            margin-right: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <div class="split-container">
+        <!-- ЛЕВАЯ ЧАСТЬ: ТЕКСТ О ХОГВАРТСЕ -->
+        <div class="text-section">
+            <p>Hogwarts School of Witchcraft and Wizardry (/ˈhɒɡwɔːrts/) is a fictional boarding school of magic in the Harry Potter series by J. K. Rowling. It is the primary setting for the first six novels and films and also serves as a major setting in the larger Wizarding World media franchise.[2]</p>
+            <p>In the novels, Hogwarts is described as a coeducational, secondary boarding school that enrolls children from ages eleven to eighteen.[3] According to Rowling, any child in Britain who shows magical ability is invited to attend the school.[4][5] The Wizarding World website states that Hogwarts was founded in the Highlands of Scotland sometime between the 9th and 10th century by the wizards Godric Gryffindor, Helga Hufflepuff, Rowena Ravenclaw and Salazar Slytherin.[6][7] Rowling has offered varying accounts of how many students are enrolled at Hogwarts at any given time.[8][9]</p>
+            <p>In a 1999 interview, Rowling said she envisioned Hogwarts as a place that offers security to the orphaned Harry Potter. She said that she made Hogwarts a boarding school because many important plot events occur at night.[10] Several writers have suggested that Rowling took the name "Hogwarts" from the 1954 book How to Be Topp by Geoffrey Willans; the book describes a fictional play titled "The Hogwarts" and a fictional school headmaster named "Hoggwart".[11][12] Rowling, however, said she may have unknowingly derived the name "Hogwarts" from the name of the hogwort plant.[13][14]</p>
+            <p>The word "hogwarts" also appears once in the 1939 novel Finnegans Wake by James Joyce.[15]</p>
+        </div>
+
+        <!-- ПРАВАЯ ЧАСТЬ: ГАЛЕРЕЯ КАРТИНОК + ЛОГОТИП В НИЖНЕЙ ОБЛАСТИ -->
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h3>⚡ Волшебные отпечатки</h3>
+                <span>5 зачарованных кадров</span>
+            </div>
+            <!-- Сетка с оригинальными изображениями -->
+            <div class="image-grid">
+                <div class="img-card">
+                    <img src="https://i.pinimg.com/originals/61/c6/42/61c642c66844e8b5393b72f1ee917101.jpg?nii=t" alt="Hogwarts Great Hall atmosphere" loading="lazy">
+                </div>
+                <div class="img-card">
+                    <img src="https://i.pinimg.com/originals/f2/ce/61/f2ce614dc4c1525f1c0f689c1e50158d.jpg?nii=t" alt="Hogwarts castle landscape" loading="lazy">
+                </div>
+                <div class="img-card">
+                    <img src="https://i.pinimg.com/474x/5b/54/80/5b54804a2803461c0425b5dc2f8eabee.jpg?nii=t" alt="Magical creature and crest" loading="lazy">
+                </div>
+                <div class="img-card">
+                    <img src="https://i.pinimg.com/originals/3d/2c/e5/3d2ce589416e356af288c85c6f9ea59d.jpg?nii=t" alt="Hogwarts silhouette and stars" loading="lazy">
+                </div>
+                <div class="img-card">
+                    <img src="https://i.pinimg.com/originals/fe/f0/07/fef007d0eb25c04a4b4f79e319c356ec.jpg?nii=t" alt="House crests and magic" loading="lazy">
+                </div>
+            </div>
+
+            <!-- НОВАЯ ОБЛАСТЬ: ПУСТОЕ ПРОСТРАНСТВО ПОД КАРТИНКАМИ ЗАПОЛНЕНО ЛОГОТИПОМ ХОГВАРТСА -->
+            <div class="hogwarts-logo-area">
+                <div class="logo-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Hogwarts-Crest.png" 
+                         alt="Official Hogwarts Crest - Герб Школы Чародейства и Волшебства"
+                         title="Герб Хогвартса: Гриффиндор, Пуффендуй, Когтевран, Слизерин">
+                    <p>✧  Hogwarts School of Witchcraft and Wizardry  ✧</p>
+                </div>
+            </div>
+
+            <!-- тонкий декоративный элемент (волшебная подпись) -->
+            <div style="font-size: 0.7rem; text-align: right; margin-top: 0.25rem; opacity: 0.55; font-style: italic; color: #7a5a3a;">
+                ✦ заклинание композиции — текст слева, магия справа ✦
+            </div>
+        </div>
+        <!-- КОНЕЦ правой колонки с логотипом -->
+    </div>
+</div>
+</body>
+</html>

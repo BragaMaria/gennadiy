@@ -1,0 +1,60 @@
+body{
+    display: flex;
+    justify-content: center;
+align-items: center;
+flex-direction: column;
+gap: 20px;
+background-image: url('./pngtree-serenity-of-the-sea-abstract-background-with-rippled-water-texture-calm-image_13619064.png');
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+.text{
+    font-size: 48px;
+    color: white;
+    background-color: #0b4f6e;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.btn-grad{
+    width: 400px;
+    height: 80px;
+    font-size: 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    background-color: rgb(243, 243, 69);
+}
+
+.block{
+    margin: 300px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-grad {
+  background-image: linear-gradient(to right, #314755 0%, #26a0da 51%, #314755 100%);
+}
+
+.btn-grad {
+  margin: 10px;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  outline: none;
+  border: none;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
