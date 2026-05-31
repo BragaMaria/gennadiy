@@ -400,12 +400,12 @@
                 <span class="emoji-icon">🪄</span>
             </button>
             
-            <button class="nav-btn btn-crooked1" id="btnCrooked1">
+            <button class="nav-btn btn-crooked" id="btnCrooked">
                 <span class="emoji-icon">🗺️🌙</span>
                 <span>Тайны Crooked Lane</span>
                 <span class="emoji-icon">🔮</span>
             </button>
-            <button class="nav-btn btn-crooked" id="btnCrooked">
+            <button class="nav-btn btn-crooked" id="btnGo">
                 <span class="emoji-icon">🗺️🌙</span>
                 <span>Попробуй догони</span>
                 <img class="img_cat" src="../51c11d689357f99370a5a176f91a5718.jpg" alt="">
@@ -502,14 +502,12 @@
             }, 500);
         }
 
-        // Функции перенаправления (сохраняем исходные пути из вашего кода, но с проверкой)
-        // Обратите внимание: пути '../pageGallery/index.html' и т.д. могут отличаться.
-        // Для безопасной навигации выводим красивый тост + переход.
+        
         const galleryBtn = document.getElementById('btnGallery');
         const hogwartsBtn = document.getElementById('btnHogwarts');
         const crookedBtn = document.getElementById('btnCrooked');
         const btnMinigame = document.getElementById('btnMinigame');
-        
+        const btnGo = document.getElementById('btnGo');
         // Обработчик с эффектом и тостом
         function handleNavigation(url, pageName, event) {
             if (event) {
@@ -549,6 +547,12 @@
                 handleNavigation('../pageInfo2/index.html', 'Crooked Lane', e);
             });
         }
+
+        if (btnGo) {
+            btnGo.addEventListener('click', (e) => {
+                handleNavigation('../pageMems/index.html', 'Mems', e);
+            });
+        }
         
         // Доп. защита: если какой-то из кнопок нет в DOM (но они есть по id), дополнительно выводим в консоль подсказку
         console.log('Морское меню загружено! 🐠');
@@ -576,10 +580,10 @@
         
         // Ждём полной загрузки страницы
 document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('btnCrooked');
+    const button = document.getElementById('btnGo');
     
     if (!button) {
-        console.error('Кнопка с id "btnCrooked" не найдена');
+        console.error('Кнопка с id "btnGo" не найдена');
         return;
     }
     
